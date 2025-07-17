@@ -1,0 +1,76 @@
+﻿﻿
+@model WebApplication1.Models.ViewModels.OrderView
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+@if (Model.Order != null)
+{
+    <div>
+        <p hidden id="orderId">@Model.Order.OrderId</p>
+        <p hidden>Order total: <span id="amount">@Model.Order.TotalPrice</span></p>
+    </div>
+}
+
+<script defer src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+    async function payNow() {
+        console.log("Payment initializing...");
+        const orderId = document.getElementById("orderId").innerText.trim();
+        const amount = parseInt(document.getElementById("amount").innerText.trim(), 10);
+        const currency = "INR";
+
+        const formBody = { amount, currency, orderId };
+
+        console.log(formBody);
+
+        try {
+            const res = await fetch("/api/PaymentApi/CreatePaymentIntent", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formBody),
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+
+                const options = {
+                    key: 'rzp_test_RgG9AwfnysizZu', // Replace with your Razorpay key
+                    amount: data.amount, // Amount in paise (as returned by your API)
+                    currency: data.currency,
+                    name: 'Shahid',
+                    description: 'Payment Transaction',
+                    order_id: data.OrderId, // Razorpay order ID from your API
+                    prefill: {
+                        name: "Shahid",
+                        email: "shahid@gmail.com",
+                        contact: "9149854715"
+                    },
+                    handler: function (response) {
+                        console.log("Payment Success:", response);
+                        // Redirect to the success page with the orderId
+                        window.location.href = `/Order/PaymentSuccess?OrderId=${encodeURIComponent(orderId)}`;
+                    },
+                    theme: {
+                        color: '#F37254'
+                    }
+                };
+
+                const razorPayApp = new Razorpay(options);
+                razorPayApp.open();
+            } else {
+                window.alert("Something went wrong while creating the payment intent.");
+            }
+        } catch (error) {
+            console.error("Error during payment:", error);
+            window.alert("An error occurred during payment. Please try again.");
+        }
+    }
+
+    // Call payNow when the page loads
+    payNow();
+</script>

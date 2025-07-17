@@ -1,0 +1,480 @@
+﻿
+@model WebApplication1.Models.ViewModels.CartView
+
+@{
+    ViewData["Title"] = "Amazon Futuristic Cart";
+}
+
+<!-- Ensure Bootstrap 5 CSS is included in the layout -->
+
+
+<div class="container mt-4 futuristic-amazon-cart">
+    <div class="row">
+        <!-- Main Cart Section -->
+        <div class="col-lg-8 pe-lg-4">
+           <h1 class="futuristic-title mb-3" style="color:#FF8C00;">Your Amazing Cart</h1>
+            <p class="futuristic-subtitle text-muted mb-4">You have @Model?.Cart?.CartProducts?.Count() items in your digital cart</p>
+
+            @if (Model?.products?.Count() > 0)
+            {
+                <!-- Cart Items -->
+                <div class="futuristic-cart-items shadow-lg rounded-3">
+                    @foreach (var product in Model.products)
+                    {
+                        <div class="futuristic-cart-item p-4 border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col-md-2 col-4">
+                                    <div class="futuristic-product-image shadow-sm rounded-3">
+                                        <img src="@product?.Product?.ProductImage" alt="@product?.Product?.ProductName" class="img-fluid">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-8">
+                                    <div class="futuristic-product-details">
+                                        <h3 class="futuristic-product-name mb-2">@product?.Product?.ProductName</h3>
+                                        <div class="futuristic-stock-status text-success">In Stock</div>
+                                        <div class="futuristic-shipping text-muted">Eligible for Instant Delivery</div>
+                                        <div class="futuristic-gift-options d-flex align-items-center mt-2">
+                                           
+                                            
+                                           
+                                        </div>
+                                        <div class="futuristic-actions d-flex align-items-center mt-3">
+                                            <div class="futuristic-quantity me-3">
+                                                
+                                            </div>
+                                            
+                                            <a asp-controller="product" asp-action="Removecart" asp-route-ProductId="@product?.ProductId" class="futuristic-link ms-2">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12 text-md-end mt-3 mt-md-0">
+                                    <div class="futuristic-price-section">
+                                        <div class="futuristic-price fw-bold">₹@((product?.Product?.ProductPrice ?? 0).ToString("N2"))</div>
+                                        <div class="futuristic-subtotal text-muted">Subtotal (@product?.Quantity items): ₹@(((product?.Quantity ?? 0) * (product?.Product?.ProductPrice ?? 0)).ToString("N2"))</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <!-- Empty Cart -->
+                <div class="futuristic-empty-cart text-center py-5 shadow-lg rounded-3">
+                    <img src="https://m.media-amazon.com/images/G/31/cart/empty/kettle-desaturated._CB424694257_.svg" alt="Empty Cart" class="empty-cart-icon mb-3">
+                    <h2>Your Cart is Empty</h2>
+                    <p class="text-muted">Discover the future of shopping!</p>
+                    <a href="/" class="futuristic-btn futuristic-btn-primary mt-3 btn btn-primary w-100">Explore Deals</a>
+                </div>
+            }
+        </div>
+
+        <!-- Order Summary -->
+        @if (Model?.products?.Count() > 0)
+        {
+            <div class="col-lg-4">
+                <div class="futuristic-order-summary shadow-lg rounded-3 p-4">
+                    <h3 class="futuristic-summary-title mb-3">Order Summary</h3>
+                    <div class="futuristic-summary-body">
+                        <div class="futuristic-summary-row d-flex justify-content-between py-2">
+                            <span>Subtotal (@Model?.Cart?.CartProducts?.Count() items)</span>
+                            <span>₹@(Model?.Cart?.CartTotal.ToString("N2") ?? "0.00")</span>
+                        </div>
+                        <div class="futuristic-summary-row d-flex justify-content-between py-2">
+                            <span>Delivery</span>
+                            <span class="futuristic-free text-success fw-bold">Free</span>
+                        </div>
+                        <div class="futuristic-summary-row d-flex justify-content-between py-2">
+                            <span>Discount</span>
+                            <span>₹0.00</span>
+                        </div>
+                        <div class="futuristic-summary-row futuristic-total-row d-flex justify-content-between py-3 border-top mt-2">
+                            <span class="fw-bold">Total</span>
+                            <span class="futuristic-total fw-bold">₹@(Model?.Cart?.CartTotal.ToString("N2") ?? "0.00")</span>
+                        </div>
+                        <a asp-controller="Order" asp-action="CheckOut" asp-route-CartId="@Model?.Cart?.CartId" class="futuristic-btn futuristic-btn-checkout btn btn-primary w-100 mt-3">Proceed to Checkout</a>
+                    </div>
+                </div>
+                <div class="futuristic-secure mt-4 d-flex justify-content-center align-items-center shadow-sm rounded-3 p-3 mx-auto" style="max-width: 350px;">
+                    <i class="bi bi-lock-fill me-2"></i> Quantum-Secured Transaction
+                </div>
+                <!-- Recommendations -->
+                
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Ensure Bootstrap 5 JS and Popper.js are included for interactivity -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<style>
+    /* Enhanced Futuristic Amazon Color Scheme */
+    :root {
+        --amazon-orange: #FFAA00;
+        --amazon-dark-orange: #FF8C00;
+        --amazon-yellow: #FFEA00;
+        --amazon-dark-yellow: #FFD700;
+        --amazon-blue: #146EB4;
+        --amazon-dark-blue: #0C4A80;
+        --amazon-light-gray: #F5F6F5;
+        --amazon-gray: #DDE0E3;
+        --amazon-dark-gray: #2A2E33;
+        --amazon-white: #FFFFFF;
+        --futuristic-neon: #00E5FF;
+        --futuristic-dark: #0A121A;
+    }
+
+    /* Base Styles */
+    .futuristic-amazon-cart {
+        font-family: "Amazon Ember", Arial, sans-serif;
+        background: linear-gradient(180deg, var(--amazon-light-gray), var(--amazon-white));
+        color: #0F1111;
+        min-height: 100vh;
+    }
+
+    /* Cart Title */
+    .futuristic-title {
+        font-size: 2rem;
+        font-weight: 400;
+        color: var(--amazon-dark-blue);
+        text-shadow: 0 0 6px rgba(20, 110, 180, 0.3);
+        transition: text-shadow 0.3s ease;
+    }
+
+    .futuristic-title:hover {
+        text-shadow: 0 0 10px var(--futuristic-neon);
+    }
+
+    .futuristic-subtitle {
+        font-size: 0.9375rem;
+        color: var(--amazon-dark-gray);
+    }
+
+    /* Cart Items */
+    .futuristic-cart-items {
+        background: var(--amazon-white);
+        overflow: hidden;
+    }
+
+    .futuristic-cart-item {
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .futuristic-cart-item:hover {
+        background: rgba(0, 229, 255, 0.05);
+        box-shadow: 0 0 12px rgba(0, 229, 255, 0.2);
+    }
+
+    .futuristic-product-image {
+        max-width: 120px;
+        height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--amazon-gray);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .futuristic-product-image:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 15px var(--futuristic-neon);
+    }
+
+    .futuristic-product-name {
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: var(--amazon-dark-blue);
+        transition: color 0.3s ease;
+    }
+
+    .futuristic-product-name:hover {
+        color: var(--futuristic-neon);
+    }
+
+    .futuristic-stock-status {
+        font-size: 0.8125rem;
+    }
+
+    .futuristic-shipping {
+        font-size: 0.8125rem;
+        color: var(--amazon-dark-gray);
+    }
+
+    .futuristic-gift-options {
+        font-size: 0.8125rem;
+        color: var(--amazon-dark-gray);
+    }
+
+    .futuristic-checkbox {
+        accent-color: var(--amazon-orange);
+        transition: transform 0.3s ease;
+    }
+
+    .futuristic-checkbox:hover {
+        transform: scale(1.2);
+    }
+
+    .futuristic-qty-select {
+        border: 1px solid var(--amazon-gray);
+        background: var(--amazon-white);
+        color: var(--amazon-dark-gray);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .futuristic-qty-select:focus {
+        border-color: var(--futuristic-neon);
+        box-shadow: 0 0 8px var(--futuristic-neon);
+    }
+
+    .futuristic-link {
+        font-size: 0.8125rem;
+        color: var(--amazon-blue);
+        text-decoration: none;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .futuristic-link:hover {
+        color: var(--futuristic-neon);
+        transform: translateY(-1px);
+        text-decoration: underline;
+    }
+
+    .futuristic-divider {
+        color: var(--amazon-gray);
+        margin: 0 10px;
+    }
+
+    .futuristic-price {
+        font-size: 1.125rem;
+        color: var(--amazon-dark-orange);
+        transition: text-shadow 0.3s ease;
+    }
+
+    .futuristic-price:hover {
+        text-shadow: 0 0 8px var(--amazon-orange);
+    }
+
+    .futuristic-subtotal {
+        font-size: 0.875rem;
+        color: var(--amazon-dark-gray);
+    }
+
+    /* Order Summary */
+    .futuristic-order-summary {
+        background: linear-gradient(180deg, var(--amazon-white), var(--amazon-light-gray));
+        transition: box-shadow 0.3s ease;
+    }
+
+    .futuristic-order-summary:hover {
+        box-shadow: 0 6px 25px rgba(0, 229, 255, 0.2);
+    }
+
+    .futuristic-summary-title {
+        font-size: 1.375rem;
+        font-weight: 500;
+        color: var(--amazon-dark-blue);
+        transition: text-shadow 0.3s ease;
+    }
+
+    .futuristic-summary-title:hover {
+        text-shadow: 0 0 6px var(--futuristic-neon);
+    }
+
+    .futuristic-total {
+        color: var(--amazon-dark-orange);
+        font-size: 1.25rem;
+        transition: text-shadow 0.3s ease;
+    }
+
+    .futuristic-total:hover {
+        text-shadow: 0 0 8px var(--amazon-orange);
+    }
+
+    /* Buttons */
+    .futuristic-btn-primary {
+        background: var(--amazon-yellow);
+        border: 1px solid var(--amazon-dark-yellow);
+        color: #0F1111;
+    }
+
+    .futuristic-btn-primary:hover {
+        background: var(--amazon-dark-yellow);
+        box-shadow: 0 0 12px var(--futuristic-neon);
+        transform: translateY(-2px);
+    }
+
+    .futuristic-btn-checkout {
+        background: linear-gradient(45deg, var(--amazon-yellow), var(--amazon-orange));
+        border: none;
+        color: #0F1111;
+        font-weight: 600;
+    }
+
+    .futuristic-btn-checkout:hover {
+        background: linear-gradient(45deg, var(--amazon-dark-yellow), var(--amazon-dark-orange));
+        box-shadow: 0 6px 20px rgba(0, 229, 255, 0.5);
+        transform: translateY(-2px);
+    }
+
+    .futuristic-btn-secondary {
+        background: var(--amazon-light-gray);
+        border: 1px solid var(--amazon-gray);
+        color: var(--amazon-dark-blue);
+    }
+
+    .futuristic-btn-secondary:hover {
+        background: var(--amazon-gray);
+        box-shadow: 0 0 10px var(--futuristic-neon);
+        transform: translateY(-2px);
+    }
+
+    /* Secure Transaction */
+    .futuristic-secure {
+        font-size: 0.875rem;
+        color: var(--amazon-dark-gray);
+        background: var(--amazon-white);
+        transition: color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .futuristic-secure:hover {
+        color: var(--futuristic-neon);
+        box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    }
+
+    .futuristic-secure i {
+        color: var(--futuristic-neon);
+        font-size: 1rem;
+       ;transition: transform 0.3s ease;
+    }
+
+    .futuristic-secure i:hover {
+        transform: scale(1.2);
+    }
+
+    /* Recommendations */
+    .futuristic-recommendations {
+        background: linear-gradient(180deg, var(--amazon-white), var(--amazon-light-gray));
+        transition: box-shadow 0.3s ease;
+    }
+
+    .futuristic-recommendations:hover {
+        box-shadow: 0 6px 25px rgba(0, 229, 255, 0.2);
+    }
+
+    .futuristic-recommend-title {
+        font-size: 1.0625rem;
+        font-weight: 500;
+        color: var(--amazon-dark-blue);
+        transition: text-shadow 0.3s ease;
+    }
+
+    .futuristic-recommend-title:hover {
+        text-shadow: 0 0 6px var(--futuristic-neon);
+    }
+
+    .futuristic-recommend-item {
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .futuristic-recommend-item:hover {
+        transform: translateX(3px);
+        background: rgba(0, 229, 255, 0.05);
+    }
+
+    .futuristic-recommend-price {
+        color: var(--amazon-dark-orange);
+        min-width: 80px;
+        text-align: right;
+    }
+
+    /* Empty Cart */
+    .futuristic-empty-cart {
+        background: var(--amazon-white);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .futuristic-empty-cart:hover {
+        box-shadow: 0 6px 25px rgba(0, 229, 255, 0.2);
+    }
+
+    .empty-cart-icon {
+        width: 130px;
+        filter: opacity(0.7);
+        transition: transform 0.3s ease;
+    }
+
+    .empty-cart-icon:hover {
+        transform: scale(1.1);
+    }
+
+    .futuristic-empty-cart h2 {
+        font-size: 1.625rem;
+        font-weight: 400;
+        color: var(--amazon-dark-blue);
+        transition: text-shadow 0.3s ease;
+    }
+
+    .futuristic-empty-cart h2:hover {
+        text-shadow: 0 0 6px var(--futuristic-neon);
+    }
+
+    /* Responsive Adjustments */
+ 
+
+        .futuristic-recommend-item {
+            padding: 6px;
+        }
+
+        .futuristic-recommend-title {
+            font-size: 0.9375rem;
+        }
+
+        .futuristic-secure {
+            font-size: 0.8125rem;
+            padding: 6px;
+        }
+    }
+
+
+        .futuristic-recommend-price {
+            min-width: 60px;
+        }
+
+        .futuristic-secure {
+            font-size: 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    // Quantity selector update with visual feedback
+    document.querySelectorAll('.futuristic-qty-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+            const productId = e.target.dataset.productId;
+            const quantity = e.target.value;
+            console.log(`Update product ${productId} to quantity ${quantity}`);
+            e.target.style.borderColor = 'var(--futuristic-neon)';
+            e.target.style.boxShadow = '0 0 10px var(--futuristic-neon)';
+            setTimeout(() => {
+                e.target.style.borderColor = 'var(--amazon-gray)';
+                e.target.style.boxShadow = 'none';
+            }, 600);
+        });
+    });
+
+    // Enhanced hover effects
+    document.querySelectorAll('.futuristic-btn, .futuristic-link, .futuristic-product-image, .futuristic-secure, .futuristic-checkbox').forEach(element => {
+        element.addEventListener('mouseover', () => {
+            element.style.transform = element.classList.contains('futuristic-checkbox') ? 'scale(1.2)' : 'translateY(-3px)';
+            element.style.boxShadow = element.classList.contains('futuristic-product-image') || element.classList.contains('futuristic-secure') ? '0 0 15px var(--futuristic-neon)' : '0 4px 15px rgba(0, 229, 255, 0.4)';
+        });
+        element.addEventListener('mouseout', () => {
+            element.style.transform = element.classList.contains('futuristic-checkbox') ? 'scale(1)' : 'translateY(0)';
+            element.style.boxShadow = element.classList.contains('futuristic-product-image') || element.classList.contains('futuristic-secure') ? '0 2px 8px rgba(0, 0, 0, 0.1)' : 'none';
+        });
+    });
+</script>
+```

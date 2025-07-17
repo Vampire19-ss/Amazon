@@ -1,0 +1,290 @@
+﻿﻿
+@model WebApplication1.Models.ViewModels.CartView
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<!-- Bootstrap 5 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<style>
+    body {
+        background: linear-gradient(to bottom, #f5f5f5, #ececec); /* Subtle premium gradient */
+        font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        color: #0F1111; /* Amazon dark text */
+        line-height: 1.5;
+    }
+
+    .prime-badge {
+        background: linear-gradient(135deg, #232F3E, #37475A); /* Amazon Prime navy gradient */
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 0.5rem 1.2rem;
+        border-radius: 6px;
+        display: inline-block;
+        margin-top: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-amazon {
+        background: linear-gradient(to bottom, #f7dfa5, #f0c14b); /* Amazon gold gradient */
+        border: 1px solid #a88734;
+        color: #0F1111;
+        font-weight: 700;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-amazon:hover {
+        background: linear-gradient(to bottom, #f5d78e, #eeb933);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-amazon:active {
+        background: linear-gradient(to bottom, #e6ca7e, #e0a926);
+        border-color: #8c6e28;
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-prime {
+        color: #0F1111;
+        text-decoration: none;
+        font-weight: 700;
+        transition: color 0.2s ease;
+    }
+
+    .text-prime:hover {
+        color: #e77600; /* Brighter Amazon orange */
+        text-decoration: none;
+    }
+
+    .product-image {
+        max-width: 90px;
+        height: auto;
+        border-radius: 6px;
+        object-fit: contain;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .order-total {
+        font-weight: 700;
+        color: #B12704; /* Amazon red price */
+    }
+
+    .validation-summary-errors {
+        color: #dc3545;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        background: #fff;
+        padding: 0.8rem;
+        border-radius: 6px;
+        border: 1px solid #dc3545;
+    }
+
+   
+    }
+</style>
+
+<div class="container my-4">
+    @if (Model?.Cart?.CartTotal == 0)
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            <h5 class="alert-heading">Your Amazon Cart is Empty</h5>
+            <p class="mb-0">
+                <a asp-controller="product" asp-action="index" class="text-prime">Shop today's deals</a> or 
+                <a asp-controller="order" asp-action="recent" class="text-prime">view your orders</a>.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-0 d-inline-block">
+                    <i class="bi bi-cart-check me-2"></i>Checkout
+                </h2>
+                <span class="prime-badge">Amazon Prime</span>
+                <p class="text-muted mt-1">* Review or update your shipping address below to enjoy Prime benefits.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <form class="card needs-validation shadow-sm" method="post" asp-controller="User" asp-action="CreateAddress" asp-route-CartId="@Model?.Cart?.CartId" novalidate>
+                    <div class="card-body">
+                        <div asp-validation-summary="All" class="validation-summary-errors"></div>
+                        <h3 class="h5 mb-4">
+                            <i class="bi bi-geo-alt me-2"></i>
+                            @(Model?.Address == null ? "Add a new address" : "Update your address")
+                        </h3>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" name="FirstName" value="@Model?.Address?.FirstName" placeholder="First name" required>
+                                <div class="invalid-feedback">Please enter your first name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" name="LastName" value="@Model?.Address?.LastName" placeholder="Last name" required>
+                                <div class="invalid-feedback">Please enter your last name.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Street Address</label>
+                            <input type="text" class="form-control" name="Street" value="@Model?.Address?.Street" placeholder="Street address" required>
+                            <div class="invalid-feedback">Please enter your street address.</div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" name="City" value="@Model?.Address?.City" placeholder="City" required>
+                                <div class="invalid-feedback">Please enter your city.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">State</label>
+                                <input type="text" class="form-control" name="State" value="@Model?.Address?.State" placeholder="State" required>
+                                <div class="invalid-feedback">Please enter your state.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Pincode</label>
+                                <input type="text" class="form-control" name="Pincode" value="@Model?.Address?.Pincode" placeholder="Pincode" required>
+                                <div class="invalid-feedback">Please enter your pincode.</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Country</label>
+                            <input type="text" class="form-control" name="Country" value="@Model?.Address?.Country" placeholder="Country" required>
+                            <div class="invalid-feedback">Please enter your country.</div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" name="Phone" value="@Model?.Address?.Phone" placeholder="Phone number" required>
+                                <div class="invalid-feedback">Please enter your phone number.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">District</label>
+                                <input type="text" class="form-control" name="District" value="@Model?.Address?.Landmark" placeholder="Nearby Landmark" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Landmark</label>
+                                <input type="text" class="form-control" name="Landmark" value="@Model?.Address?.Landmark" placeholder="Nearby Landmark" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-amazon w-100">
+                            @(Model?.Address == null ? "Use this address" : "Update address")
+                        </button>
+                    </div>
+                </form>
+
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">
+                            <i class="bi bi-wallet2 me-2"></i>Order Total
+                        </h3>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0 order-total">₹@Model?.Cart?.CartTotal</h4>
+                            <a class="btn btn-amazon" asp-controller="Order" asp-action="Create" asp-route-CartId="@Model?.Cart?.CartId">Proceed to Payment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <i class="bi bi-truck me-2"></i>
+                        <strong>Eligible for FREE Prime Delivery</strong>
+                        <p class="mb-0 text-muted">Get it by tomorrow with your Prime membership.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">
+                            <i class="bi bi-box-seam me-2"></i>Order Summary
+                            <span class="prime-badge ms-2">Prime</span>
+                        </h3>
+                        @if (Model?.products != null)
+                        {
+                            @foreach (var product in Model.products)
+                            {
+                                <a asp-controller="product" asp-action="details" asp-route-ProductId="@product?.ProductId" class="text-decoration-none">
+                                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
+                                        <div class="col-4 pe-2">
+                                            <img src="@product?.Product?.ProductImage" alt="@product?.Product?.ProductName" class="product-image">
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="mb-1 text-dark fw-medium">@product?.Product?.ProductName</p>
+                                            <small class="text-muted">@product?.Color</small>
+                                            <small class="text-prime d-block">FREE Prime Delivery</small>
+                                        </div>
+                                        <div class="col-2 text-end">
+                                            <p class="mb-0 order-total">₹@product?.Product?.ProductPrice x @product?.Quantity</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        <hr class="my-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>Order Total:</strong>
+                            <strong class="order-total">₹@Model?.Cart?.CartTotal</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">
+                            <i class="bi bi-truck me-2"></i>Shipping Address
+                        </h3>
+                        @if (Model?.Address != null)
+                        {
+                            <p class="mb-1"><strong>@Model?.Address?.FirstName @Model?.Address?.LastName</strong></p>
+                            <p class="mb-1">@Model?.Address?.Street, @Model?.Address?.City</p>
+                            <p class="mb-1">@Model?.Address?.State @Model?.Address?.Pincode</p>
+                            <p class="mb-0">@Model?.Address?.Country</p>
+                            <small class="text-muted">Phone: @Model?.Address?.Phone</small>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Please add a shipping address above.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+<!-- Bootstrap Custom Validation Script -->
+<script>
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>

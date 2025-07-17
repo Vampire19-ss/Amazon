@@ -1,0 +1,210 @@
+﻿
+@model List<WebApplication1.Models.DomainModels.Support>
+
+@{
+    ViewBag.Title = "support List";
+}
+
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Helvetica:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --amazon-orange: #FF9900; /* Amazon's primary orange */
+        --amazon-blue: #232F3E; /* Amazon's dark blue */
+        --amazon-light-blue: #146EB4; /* Amazon's link blue */
+        --amazon-gray: #F7F7F7; /* Light gray for backgrounds */
+        --amazon-white: #FFFFFF; /* White for clean elements */
+        --shadow-orange: 0 0 8px rgba(255, 153, 0, 0.3);
+        --shadow-blue: 0 0 8px rgba(35, 47, 62, 0.2);
+    }
+    
+    body {
+        font-family: 'Helvetica', sans-serif; /* Amazon-like font */
+        background-color: var(--amazon-gray);
+        color: var(--amazon-blue);
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+    
+    h1 {
+        font-family: 'Helvetica', sans-serif;
+        text-align: center;
+        color: var(--amazon-blue);
+        font-weight: 700;
+        font-size: 2rem;
+        padding-bottom: 10px;
+        margin-top: 2rem;
+        border-bottom: 2px solid var(--amazon-orange);
+    }
+    
+    .table-responsive {
+        margin: 2rem 0;
+    }
+    
+    .table {
+        background-color: var(--amazon-white);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow-blue);
+        border: 1px solid var(--amazon-light-blue);
+    }
+    
+    .table:hover {
+        box-shadow: 0 0 12px rgba(20, 110, 180, 0.4);
+    }
+    
+    .thead-dark {
+        background-color: var(--amazon-blue);
+        color: var(--amazon-white);
+        font-family: 'Helvetica', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .thead-dark th {
+        border-bottom: 2px solid var(--amazon-orange);
+        padding: 12px;
+    }
+    
+    tbody tr {
+        background-color: var(--amazon-white);
+        border-bottom: 1px solid rgba(20, 110, 180, 0.1);
+    }
+    
+    tbody tr:hover {
+        background-color: var(--amazon-gray);
+    }
+    
+    tbody tr td {
+        vertical-align: middle;
+        padding: 10px 12px;
+        color: var(--amazon-blue);
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    tbody tr:hover td {
+        color: var(--amazon-light-blue);
+    }
+    
+    .img-thumbnail {
+        border: 1px solid var(--amazon-orange);
+        background-color: var(--amazon-white);
+        max-width: 120px;
+        height: auto;
+        object-fit: cover;
+        border-radius: 4px;
+        padding: 2px;
+    }
+    
+    .img-thumbnail:hover {
+        box-shadow: var(--shadow-orange);
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        font-family: 'Helvetica', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border: none;
+        min-width: 80px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        padding: 8px 12px;
+        transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .btn-edit {
+        background-color: var(--amazon-orange);
+        color: var(--amazon-white);
+        box-shadow: var(--shadow-orange);
+    }
+    
+    .btn-edit:hover {
+        background-color: var(--amazon-light-blue);
+        box-shadow: var(--shadow-blue);
+    }
+    
+    .btn-archive {
+        background-color: var(--amazon-light-blue);
+        color: var(--amazon-white);
+        box-shadow: var(--shadow-blue);
+    }
+    
+    .btn-archive:hover {
+        background-color: var(--amazon-orange);
+        box-shadow: var(--shadow-orange);
+    }
+    
+    
+        
+        h1 {
+            font-size: 1.6rem;
+        }
+        
+        .img-thumbnail {
+            max-width: 100px;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .btn {
+            padding: 6px 10px;
+            font-size: 0.8rem;
+            width: 100px;
+        }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+<h1>support LIST</h1>
+
+<div class="table-responsive">
+    <div class="p-4">
+        <table class="table table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    
+                    <th scope="col">Name</th>
+                    <th scope="col">phone</th>
+                    <th scope="col"> PICTURE</th>
+                    <th scope="col">Actions</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var support in Model)
+                {
+                    <tr>
+                        <td>@support.Name</td>
+                        <td>@support.Phone</td>
+                        <td><img src="@support.SupportImage" alt="support image" class="img-thumbnail"></td>
+                        <td>
+                            <div class="action-buttons d-flex">
+                                <a  class="btn btn-edit" asp-controller="Admin" asp-action="Supportdetails" asp-route-SupportId="@support.SupportId">details</a>
+                                <a class="btn btn-danger" asp-controller="Admin" asp-action="Deletesupport" asp-route-SupportId="@support.SupportId">delete</a>
+                            </div>
+                           
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

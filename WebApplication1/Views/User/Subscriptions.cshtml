@@ -1,0 +1,133 @@
+﻿@model List<WebApplication1.Models.DomainModels.CreateSubscription>
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+<style>
+    body {
+        font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        background-color: #FAFAFA;
+        color: #0F1111;
+    }
+
+    .container {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .subscription-card {
+        background-color: white;
+        border: 1px solid #EAEDED;
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 24px;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .subscription-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .plan-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #232F3E;
+        margin-bottom: 12px;
+    }
+
+    .description {
+        font-size: 1rem;
+        color: #565959;
+        line-height: 1.5;
+        margin-bottom: 16px;
+    }
+
+    .price {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #B12704;
+        margin-bottom: 16px;
+    }
+
+    .btn-subscribe {
+        background-color: #FFD814;
+        border-color: #FFD814;
+        color: #111;
+        font-weight: 500;
+        padding: 10px 20px;
+        border-radius: 4px;
+        width: 100%;
+        transition: background-color 0.2s;
+    }
+
+    .btn-subscribe:hover {
+        background-color: #F7CA00;
+        border-color: #F7CA00;
+    }
+
+    .btn-subscribe:disabled {
+        background-color: #EAEDED;
+        border-color: #EAEDED;
+        cursor: not-allowed;
+    }
+
+    .col-md-4 {
+        max-width: 350px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        font-size: 2rem;
+        font-weight: 400;
+        color: #232F3E;
+    }
+
+    .text-muted {
+        font-size: 1.1rem;
+        color: #565959;
+    }
+
+    .footer {
+        background-color: #131921;
+        color: #DDD;
+        padding: 16px 0;
+        text-align: center;
+        margin-top: 48px;
+        font-size: 0.85rem;
+    }
+
+    .footer a {
+        color: #99C7FF;
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        text-decoration: underline;
+        color: #F90;
+    }
+</style>
+
+<div class="container">
+    <h1 class="text-center mb-4">Choose Your Subscription Plan</h1>
+    <p class="text-center mb-5 text-muted">Unlock exclusive benefits and savings with our subscription plans tailored for you.</p>
+
+    <div class="row g-4 d-flex justify-content-center">
+        @foreach (var sub in Model)
+        {
+            <div class="col-md-4">
+                <div class="subscription-card p-4 text-center">
+                    <h3 class="plan-title">@sub.CreateSubscriptionName</h3>
+                    <p class="description">@Html.Raw(sub.Description)</p>
+                    <p  class="price" data-amount="@sub.Total">@sub.Total.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("en-US")) / month</p>
+                    
+                   
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
